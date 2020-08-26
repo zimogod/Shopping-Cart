@@ -9,21 +9,23 @@
     >
       <div class="content">
         <!-- 显示容器 -->
-        <router-view :list="list"></router-view>
+        <router-view></router-view>
       </div>
     </van-pull-refresh>
 
     <div class="footer">
       <van-tabbar v-model="active">
-        <van-tabbar-item v-for="item in routes" :key="item.id" :icon="item.icon">
-          <router-link :to="{path:item.path}">{{ item.alias }}</router-link>
-        </van-tabbar-item>
+        <router-link v-for="item in routes" :key="item.id" :to="{path:item.path}">
+          <van-tabbar-item  :icon="item.icon">
+              {{ item.alias }}
+          </van-tabbar-item>
+        </router-link>
       </van-tabbar>
     </div>
   </div>
 </template>
 <script>
-import { listObj } from "./server";
+
 import List from "./client/list";
 import { Toast } from "vant";
 export default {
@@ -47,7 +49,6 @@ export default {
     };
   },
   mounted(){
-    this.getGoodsList()
   },
   methods: {
     onSelect(option) {
@@ -58,20 +59,11 @@ export default {
       setTimeout(() => {
         Toast.success("刷新成功");
         this.isLoading = false;
-        this.getGoodsList();
+        // this.getGoodsList();
       }, 1000);
     },
     onClickLeft() {
       Toast("返回");
-    },
-    getGoodsList() {
-      listObj.goodsList().then((res) => {
-        console.log('下拉刷新===')
-        res.forEach((item) => {
-          item.price = item.price + ".00";
-        });
-        this.list = res;
-      });
     },
   },
   // 可以监听vue组件中的props、data函数、当前路由中的变量等
@@ -131,11 +123,11 @@ export default {
   .footer {
     width: 100%;
     height: 0.7rem;
-    .router-link-active {
-      color: #1989fa;
-    }
-    a {
-      color: #ccc;
+    .van-tabbar{
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      flex-flow: row nowrap;
     }
   }
 }

@@ -6,30 +6,30 @@
           <van-checkbox v-model="allChecked" checked-color="#ee0a24">全选</van-checkbox>
         </div>
         <div>
-          购物列表
-          <img class="car_img1" :src="imgUrl" />
+          <van-button type="danger" @click="CLEARSHOPCAR">清空购物车</van-button>
         </div>
       </div>
 
       <div class="carts">
-        <div class="shop_car_main_main" v-for="(item,index) in 10" :key="index">
+        <div class="shop_car_main_main" v-for="(item,index) in goodsList" :key="index">
           <van-checkbox v-model="checked" :value="item.id" checked-color="#ee0a24"></van-checkbox>
-          <img class="car_img2" :src="imgUrl" />
+          <img class="car_img2" :src="item.goodimg" />
           <div class="shop_car_main_main_right">
-            <div class="shop_car_main_main_right_text">好吃</div>
+            <div class="shop_car_main_main_right_text">{{ item.goodname }}</div>
             <div class="zongliang">
-              <span>重量:0.39kg</span>
+              <span>{{ item.info }}</span>
             </div>
             <div class="press_div">
-              <span class="span_press">￥100</span>
+              <span class="span_press">￥{{ item.price }}</span>
               <span class="jisuan">
                 <button>-</button>
-                <span class="jisuan_span">20</span>
+                <span class="jisuan_span">{{ item.goodsNum }}</span>
                 <button>+</button>
               </span>
             </div>
           </div>
         </div>
+        <div>{{ obj.num }}--{{ obj.age }}</div>
       </div>
       <div class="submit_money">
         <van-submit-bar :price="3050" button-text="提交订单" @submit="onSubmit">
@@ -41,20 +41,39 @@
   </div>
 </template>
 <script>
+import Vue from 'vue';
+import { mapState, mapActions } from 'vuex';
 export default {
   name: "cart",
   data() {
     return {
+      obj:{
+        num:10,
+        age:1000
+      },
       checked: [],
       allChecked: false,
       selectedData: [],
-      goodsList: [{}],
       imgUrl: require("../assets/logo.png"),
     };
   },
+  computed:{
+    ...mapState(['goodsList'])
+  },
   methods: {
+    ...mapActions(['CLEARSHOPCAR']),
     onSubmit() {},
   },
+  created(){
+    Vue.delete(this.obj,'num')
+    this.$delete(this.obj,'age')
+    console.log(this)
+    // this.$set(this.obj,'age',1000);
+    // this.obj.age =1000;
+  },
+  mounted(){
+    console.log(this.goodsList,'===')
+  }
 };
 </script>
 <style lang="less">
@@ -107,8 +126,9 @@ export default {
     font-family: PingFangSC-regular;
   }
   .car_img1 {
-    width: 20px;
-    height: 20px;
+    width: .2rem;
+    height: .19rem;
+    padding-top: .06rem;
   }
   .car_img2 {
     width: 0.9rem;
@@ -126,7 +146,7 @@ export default {
     background: #fafafa;
   }
   .shop_car_main_main:nth-last-child(1) {
-    margin-bottom: 0.56rem;
+    margin-bottom: 0.6rem;
   }
   .shop_car_main_top {
     padding-bottom: 0.06rem;
@@ -134,6 +154,7 @@ export default {
     display: flex;
     border-bottom: 1px solid #ccc;
     justify-content: space-between;
+    align-items: center;
   }
   .carts {
     width: 100%;
@@ -167,15 +188,16 @@ export default {
     align-items: center;
   }
   .press_div button {
+    width: .26rem;
     border: none;
     background-color: white;
     font-size: .2rem;
-    height: .2rem;
-    line-height: .2rem;
+    height: .26rem;
     color: #fff;
     border: none;
     border-radius: 2px;
     background: #ee0a24;
+    padding: 0;
   }
   .jisuan {
     line-height: 17px;
@@ -199,6 +221,9 @@ export default {
     align-items: center;
     span:nth-of-type(2) {
       margin-right: 0.2rem;
+    }
+    .van-submit-bar__bar{
+      border-top: 1px solid #ccc;
     }
   }
   .jisuan_span {
