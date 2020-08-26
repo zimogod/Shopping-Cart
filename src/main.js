@@ -10,12 +10,16 @@ import {
   PullRefresh,
   ShareSheet,
   Cell, 
-  Card
+  Card,
+  Checkbox,
+  SubmitBar
 } from 'vant';
 
 Vue.config.productionTip = false
 
 Vue.use(Cell);
+Vue.use(SubmitBar);
+Vue.use(Checkbox);
 Vue.use(Card);
 Vue.use(Button);
 Vue.use(ShareSheet);

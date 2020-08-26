@@ -1,38 +1,53 @@
 <template>
   <div class="list">
-    <van-card v-for="item in list" :key="item.id"
-        num="添加购物车"
-        :price="item.price"
-        :desc="item.info"
-        :title="item.goodname"
-        :thumb="item.goodimg"
-    />
+    <van-card
+      v-for="item in list"
+      :key="item.id"
+      :price="item.price"
+      :desc="item.info"
+      :title="item.goodname"
+      :thumb="item.goodimg"
+    >
+      <template #bottom>
+        <van-button type="danger" size="mini" round>添加购物车</van-button>
+      </template>
+    </van-card>
   </div>
 </template>
 <script>
-import { listObj } from '../server';
+
 export default {
   name: "list",
-  data() {
-    return {
-      list:[]
-    };
-  },
-  methods:{
-    getGoodsList(){
-      listObj.goodsList().then(res =>{
-        this.list = res;
-      })
+  props:{
+    list:{
+      type:Array,
+      default:() => []
     }
   },
-  mounted(){
-    this.getGoodsList()
-  }
+  data() {
+    return {
+      // list: [],
+    };
+  },
+  methods: {
+    
+  },
+  mounted() {
+  },
 };
 </script>
 <style lang="less">
-.list{
-    width: 100%;
-    height: 100%;
+.list {
+  width: 100%;
+  height: 100%;
+  .van-card__bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 0.26rem;
+  }
+  .van-card__content{
+    justify-content: space-around;
+  }
 }
 </style>
