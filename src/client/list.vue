@@ -1,23 +1,25 @@
 <template>
   <div class="list">
-   <router-link v-for="item in list" :to="`/detail/${item.id}`"  :key="item.id">
-      <van-card
-        :price="item.price"
-        :desc="item.info"
-        :title="item.goodname"
-        :thumb="item.goodimg"
-      >
-        <template #bottom>
-          <van-button type="danger" size="mini" @click="GOODS_LIST(item)" round>添加购物车</van-button>
-        </template>
+    <van-card
+      v-for="item in list"
+      :key="item.id"
+      :price="item.price"
+      :desc="item.info"
+      :title="item.goodname"
+      :thumb="item.goodimg"
+      @click-thumb="goToDetails(item)"
+      @click="GOTODETAILS(item)"
+    >
+      <template #bottom>
+        <van-button type="danger" size="mini" @click="GOODS_LIST(item)" round>添加购物车</van-button>
+      </template>
     </van-card>
-   </router-link>
   </div>
 </template>
 <script>
 import { listObj } from "../server";
-import { mapActions } from 'vuex';
-import bus from '../eventbus';
+import { mapActions } from "vuex";
+// import bus from "../eventbus";
 export default {
   name: "list",
   data() {
@@ -27,22 +29,27 @@ export default {
     };
   },
   methods: {
-    ...mapActions(['GOODS_LIST']),
-    getGoodsList() {
-      listObj.goodsList().then((res) => {
+    ...mapActions(["GOODS_LIST", "GOTODETAILS"]),
+    async getGoodsList() {
+     await listObj.goodsList().then((res) => {
         res.forEach((item) => {
           item.price = item.price + ".00";
         });
         this.list = res;
       });
     },
-    // changeToDetails(){
-
-    // }
+    goToDetails(item) {
+      this.$router.push({
+        name: "detail",
+        params: {
+          id:item.id
+        },
+      });
+    },
   },
-  destroyed(){
-    bus.$emit('send',this.list);
-  },
+  // destroyed() {
+  //   bus.$emit("send", this.list);
+  // },
   mounted() {
     this.getGoodsList();
   },
@@ -58,8 +65,10 @@ export default {
     align-items: center;
     height: 0.26rem;
   }
-  .van-card__content{
+  .van-card__content {
     justify-content: space-around;
   }
 }
 </style>
+
+

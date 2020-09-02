@@ -20,3 +20,60 @@ vue有哪些优点？
         1、只要有一个单选没有选上，那么全选则不选
         2、一个一个的选择商品，知道商品全部选择后，则全选也选
         3、单选时，计算出单选的价格，全选时，计算全部购物车中商品的总价
+
+
+
+        <script>
+// 通过一道题面试入职？
+// Symbol()  -->  vuex / redux  ->>  vuex  --> redux  对比    mixins   install
+//  Symbol() --》 instanceof -> [Symbol.hasIntance]
+
+
+// ajax  Promise   async/await【终极异步解决方式】  
+
+// 宏管理  【消除魔术字符串】
+// const types = 'add';
+// const reduce = 'reduce';
+// function reducer(action){
+//   switch(action.type){
+//     case types:
+//       return 10;
+//       break;
+//     case reduce:
+//       return 20;
+//       break;
+//   }
+// }
+// reducer({
+//   type:types
+// })
+
+// reducer({
+//   type:reduce
+// })
+</script>
+
+函数生成器
+function *gen(){
+    yeild 10;
+    yeild 20;
+    yeild 30;
+}
+let a = gen();
+a.next()  // {done:false,value:值}
+a.next()
+a.next() 
+a.next()//{done:true,value:undefined}
+
+function api(){
+    return {
+        next:() =>{
+            value:
+            return {
+                done:
+                value:
+            }
+        }
+    }
+}
+

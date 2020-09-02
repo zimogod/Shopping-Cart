@@ -4,7 +4,8 @@ import Vuex from 'vuex'
 Vue.use(Vuex)
 
 const state = {
-  goodsList:[]
+  goodsList:[],//添加到购物车中的数据
+  list:[] //存放当前商品数据  跳转详情页时，详情页内的数据
 }
 const mutations = {
   // 添加购物车
@@ -27,6 +28,11 @@ const mutations = {
         Vue.set(state,'goodsList',list)
       }   
     },
+    goToDetails(state,info){
+      // 必须清空当前list
+      state.list = [];
+      state.list.push(info);
+    },
     // 清空购物车  同步清空
     clearShopCar(state){
       state.goodsList = [];
@@ -36,10 +42,13 @@ const actions = {
     GOODS_LIST({commit},goodsInfo){
       commit('goodsList',goodsInfo);
     },
+    GOTODETAILS({commit},info){
+      commit('goToDetails',info);
+    },
     // 清空购物车 异步清空
     CLEARSHOPCAR({commit}){
       commit('clearShopCar');
-    }
+    },
 }
 const getters = {
   totalNums(state){

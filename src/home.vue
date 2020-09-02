@@ -16,25 +16,22 @@
     <div class="footer">
       <van-tabbar v-model="active">
         <router-link v-for="item in totalNum" :key="item.id" :to="{path:item.path}">
-          <van-tabbar-item  :icon="item.icon" :badge="item.count">
-              {{ item.alias }}
-          </van-tabbar-item>
+          <van-tabbar-item :icon="item.icon" :badge="item.count">{{ item.alias }}</van-tabbar-item>
         </router-link>
       </van-tabbar>
     </div>
   </div>
 </template>
 <script>
-
 import List from "./client/list";
 import { Toast } from "vant";
-import { mapMutations, mapGetters } from 'vuex';
+import { mapMutations, mapGetters } from "vuex";
 export default {
   name: "home",
   components: { List },
   data() {
     return {
-      list:[],
+      list: [],
       routes: this.$router.options.routes[0].children,
       showShare: false,
       options: [
@@ -49,12 +46,12 @@ export default {
       title: "商品列表",
     };
   },
-  computed:{
-    ...mapGetters(['totalNums']),
-    totalNum(){
-      let arr = this.routes.map(item => {
-        if(item.alias == '购物车'){
-          this.$set(item,'count',this.totalNums || 0);
+  computed: {
+    ...mapGetters(["totalNums"]),
+    totalNum() {
+      let arr = this.routes.map((item) => {
+        if (item.alias == "购物车") {
+          this.$set(item, "count", this.totalNums || 0);
         }
         return item;
       });
@@ -62,7 +59,6 @@ export default {
     },
   },
   methods: {
-    
     onSelect(option) {
       Toast(option.name);
       this.showShare = false;
@@ -81,19 +77,19 @@ export default {
   // 可以监听vue组件中的props、data函数、当前路由中的变量等
   watch: {
     // watch中 给一个变量加 '' ，则说明是精确监听
-    '$route.path': function (newVal, oldVal) {
-      switch(newVal){
-        case '/active':
-          this.title = '限时活动';
+    "$route.path": function (newVal, oldVal) {
+      switch (newVal) {
+        case "/active":
+          this.title = "限时活动";
           break;
-        case '/cart':
-          this.title = '购物车';
+        case "/cart":
+          this.title = "购物车";
           break;
-        case '/mine':
-          this.title = '个人中心';
+        case "/mine":
+          this.title = "个人中心";
           break;
         default:
-          this.title = '商品列表';
+          this.title = "商品列表";
       }
     },
     // 深度监听 ，如果一个变量监听不到，应该开启deep深度监听
@@ -104,7 +100,6 @@ export default {
 };
 </script>
 <style lang="less">
-
 .van-tabbar--fixed {
   position: none;
   height: 0.6rem;
@@ -135,7 +130,7 @@ export default {
   .footer {
     width: 100%;
     height: 0.7rem;
-    .van-tabbar{
+    .van-tabbar {
       display: flex;
       justify-content: space-around;
       align-items: center;

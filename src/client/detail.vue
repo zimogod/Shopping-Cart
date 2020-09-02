@@ -11,31 +11,33 @@
 </template>
 <script>
 import { mapState } from 'vuex';
-import { listObj } from '../server'
-import bus from '../eventbus';
+// import bus from '../eventbus';
 export default {
   name: "detail",
   data() {
     return {
-      param:this.$route.params.id,// 获取当前路径内的params
-      list:[], // 过滤的当前商品详情数据
+      // id:this.$route.params.id,// 获取当前路径内的params
+      // list:[], // 过滤的当前商品详情数据
       goodslist:[] //全部商品数据
     };
   },
+  computed:{
+    ...mapState(['list'])
+  },
   methods:{
-    showGoodsItem(){
-      let list = this.goodslist.filter(item => item.id == this.param);
-      this.list = list;
-    }
+    // showGoodsItem(){
+    //   let list = this.goodslist.filter(item => item.id == this.id);
+    //   this.list = list;
+    // }
   },
-  created(){
-    bus.$off('send');
-    bus.$on('send',val =>{
-      this.goodslist = val;
-    })
-  },
+  // created(){
+  //   bus.$off('send');
+  //   bus.$on('send',val =>{
+  //     this.goodslist = val;
+  //   })
+  // },
   mounted(){
-    this.showGoodsItem();
+    // this.showGoodsItem();
   },
 };
 </script>
