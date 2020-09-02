@@ -1,22 +1,23 @@
 <template>
   <div class="list">
-    <van-card
-      v-for="item in list"
-      :key="item.id"
-      :price="item.price"
-      :desc="item.info"
-      :title="item.goodname"
-      :thumb="item.goodimg"
-    >
-      <template #bottom>
-        <van-button type="danger" size="mini" @click="GOODS_LIST(item)" round>添加购物车</van-button>
-      </template>
+   <router-link v-for="item in list" :to="`/detail/${item.id}`"  :key="item.id">
+      <van-card
+        :price="item.price"
+        :desc="item.info"
+        :title="item.goodname"
+        :thumb="item.goodimg"
+      >
+        <template #bottom>
+          <van-button type="danger" size="mini" @click="GOODS_LIST(item)" round>添加购物车</van-button>
+        </template>
     </van-card>
+   </router-link>
   </div>
 </template>
 <script>
 import { listObj } from "../server";
 import { mapActions } from 'vuex';
+import bus from '../eventbus';
 export default {
   name: "list",
   data() {
@@ -35,6 +36,12 @@ export default {
         this.list = res;
       });
     },
+    // changeToDetails(){
+
+    // }
+  },
+  destroyed(){
+    bus.$emit('send',this.list);
   },
   mounted() {
     this.getGoodsList();

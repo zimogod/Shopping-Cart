@@ -10,14 +10,12 @@ const mutations = {
   // 添加购物车
     goodsList(state,goodsInfo){  
       let record = state.goodsList.find(n => n.id == goodsInfo.id);
+      // 如果不存在当前商品，push商品到数组中
       if(!record){
-      // Vue.set() 全局把静态数据变成响应式数据的方法
-      // 第一个参数是你需要操作的对象
-      // 第二个参数是你需要添加的属性
-      // 第三个参数是你需要添加的属性值
-      // 手动的把goodsNum变成响应式数据，重新赋值
         Vue.set(goodsInfo,'goodsNum',1);
+        Vue.set(goodsInfo,'checked',false);
         state.goodsList.push(goodsInfo);
+      // 存在数量加1
       }else{
         let list = state.goodsList.map(item =>{
           if(item.id == goodsInfo.id){
@@ -32,7 +30,7 @@ const mutations = {
     // 清空购物车  同步清空
     clearShopCar(state){
       state.goodsList = [];
-    }
+    },
 }
 const actions = {
     GOODS_LIST({commit},goodsInfo){
@@ -44,7 +42,25 @@ const actions = {
     }
 }
 const getters = {
-  
+  totalNums(state){
+    let num = 0;
+    state.goodsList.forEach(item => {
+      num += item.goodsNum;
+    });
+    return num;
+  },
+  // 计算总价：
+  getTotalMoney(state){
+    let money = 0;
+    state.goodsList.forEach(item =>{
+      // 选择的商品才计算价格
+      if(item.checked){
+        money += Number(item.price) * Number(item.goodsNum);
+      }
+    })
+    // 总价格 
+    return money;
+  }
 }
 
 export default new Vuex.Store({

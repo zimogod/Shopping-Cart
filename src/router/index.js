@@ -40,6 +40,12 @@ Vue.use(VueRouter)
         component:() => import('../client/mine.vue')
       }
     ]
+  },
+  {
+    // 动态路由
+    path:'/detail/:id',
+    name:'detail',
+    component: () => import('../client/detail.vue')
   }
 ]
 

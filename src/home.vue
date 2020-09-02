@@ -15,8 +15,8 @@
 
     <div class="footer">
       <van-tabbar v-model="active">
-        <router-link v-for="item in routes" :key="item.id" :to="{path:item.path}">
-          <van-tabbar-item  :icon="item.icon">
+        <router-link v-for="item in totalNum" :key="item.id" :to="{path:item.path}">
+          <van-tabbar-item  :icon="item.icon" :badge="item.count">
               {{ item.alias }}
           </van-tabbar-item>
         </router-link>
@@ -28,6 +28,7 @@
 
 import List from "./client/list";
 import { Toast } from "vant";
+import { mapMutations, mapGetters } from 'vuex';
 export default {
   name: "home",
   components: { List },
@@ -48,9 +49,20 @@ export default {
       title: "商品列表",
     };
   },
-  mounted(){
+  computed:{
+    ...mapGetters(['totalNums']),
+    totalNum(){
+      let arr = this.routes.map(item => {
+        if(item.alias == '购物车'){
+          this.$set(item,'count',this.totalNums || 0);
+        }
+        return item;
+      });
+      return arr;
+    },
   },
   methods: {
+    
     onSelect(option) {
       Toast(option.name);
       this.showShare = false;
@@ -87,11 +99,12 @@ export default {
     // 深度监听 ，如果一个变量监听不到，应该开启deep深度监听
     // deep:true,
     // 立即开始监听
-    immediate: true
+    // immediate: true
   },
 };
 </script>
 <style lang="less">
+
 .van-tabbar--fixed {
   position: none;
   height: 0.6rem;
@@ -117,7 +130,6 @@ export default {
     padding-bottom: 0;
     .content {
       width: 100%;
-      height: 100%;
     }
   }
   .footer {

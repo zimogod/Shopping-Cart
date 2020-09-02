@@ -1,108 +1,167 @@
 <template>
   <div class="cart">
-    <div class="shop_car_main">
+    <div v-if="goodsList.length > 0">
       <div class="shop_car_main_top">
+        <!-- 全选 -->
         <div>
-          <van-checkbox v-model="allChecked" checked-color="#ee0a24">全选</van-checkbox>
+          <van-checkbox
+            v-model="allChecked"
+            @click="checkAll"
+            checked-color="#ee0a24"
+            >全选</van-checkbox
+          >
         </div>
+        <!-- 清空购物车 -->
         <div>
-          <van-button type="danger" @click="CLEARSHOPCAR">清空购物车</van-button>
+          <van-button type="danger" @click="CLEARSHOPCAR" size="mini"
+            >清空购物车</van-button
+          >
         </div>
       </div>
-
-      <div class="carts">
-        <div class="shop_car_main_main" v-for="(item,index) in goodsList" :key="index">
-          <van-checkbox v-model="checked" :value="item.id" checked-color="#ee0a24"></van-checkbox>
-          <img class="car_img2" :src="item.goodimg" />
-          <div class="shop_car_main_main_right">
-            <div class="shop_car_main_main_right_text">{{ item.goodname }}</div>
-            <div class="zongliang">
-              <span>{{ item.info }}</span>
-            </div>
-            <div class="press_div">
-              <span class="span_press">￥{{ item.price }}</span>
-              <span class="jisuan">
-                <button>-</button>
-                <span class="jisuan_span">{{ item.goodsNum }}</span>
-                <button>+</button>
-              </span>
-            </div>
-          </div>
-        </div>
-        <div>{{ obj.num }}--{{ obj.age }}</div>
+      <!-- 已加入购物车的商品 -->
+      <div class="cart-content" v-for="(item, index) in goodsList" :key="index">
+        <van-checkbox
+          v-model="item.checked"
+          :value="item.id"
+          @click="chooseChange(item.id)"
+          checked-color="#ee0a24"
+        ></van-checkbox>
+        <van-card
+          :price="item.price"
+          :desc="item.info"
+          :title="item.goodname"
+          :thumb="item.goodimg"
+        >
+          <template #bottom>
+            <van-button type="danger" size="mini">一</van-button>
+            <div>{{ item.goodsNum }}</div>
+            <van-button type="danger" size="mini">十</van-button>
+          </template>
+        </van-card>
       </div>
+      <!-- 总价，计算 -->
       <div class="submit_money">
-        <van-submit-bar :price="3050" button-text="提交订单" @submit="onSubmit">
-          <van-checkbox v-model="checked" checked-color="#ee0a24">全选</van-checkbox>
+        <van-submit-bar :price="getTotalMoney*100" button-text="提交订单">
+          <van-checkbox
+            v-model="allChecked"
+            @click="checkAll"
+            checked-color="#ee0a24"
+            >全选</van-checkbox
+          >
         </van-submit-bar>
       </div>
     </div>
-    <!-- <div v-else class="no-goods-car">求你了，买点儿东西吧！</div> -->
+    <div v-else class="no-goods-car">
+      <van-empty
+        class="custom-image"
+        image="https://img.yzcdn.cn/vant/custom-empty-image.png"
+        description="购物车空空如也"
+      />
+    </div>
   </div>
 </template>
 <script>
-import Vue from 'vue';
-import { mapState, mapActions } from 'vuex';
+import Vue from "vue";
+import { mapState, mapActions, mapGetters } from "vuex";
 export default {
   name: "cart",
   data() {
     return {
-      obj:{
-        num:10,
-        age:1000
-      },
-      checked: [],
       allChecked: false,
-      selectedData: [],
-      imgUrl: require("../assets/logo.png"),
+      checkData: [], // 存ID  为了 和 goodsList做对比
     };
   },
-  computed:{
-    ...mapState(['goodsList'])
+  computed: {
+    ...mapState(["goodsList"]),
+    ...mapGetters(["getTotalMoney"]),
   },
   methods: {
-    ...mapActions(['CLEARSHOPCAR']),
-    onSubmit() {},
+    ...mapActions(["CLEARSHOPCAR"]),
+    //全选、反选实现
+    checkAll() {
+      this.goodsList.forEach((item) => {
+        // 每一个商品都选择了之后，allChecked也根据每个商品的变化而变化
+        item.checked = this.allChecked;
+      });
+    },
+    // 单独的复选框
+    // 思路：我每点击选择一个商品，把当前商品的ID存储到一个数组里面 【商品的ID不能重复】 
+    chooseChange(id) {
+      // 如果有当前商品，则删除
+      if (this.checkData.indexOf(id) > -1) {
+        this.remove(this.checkData, id);
+      } else {
+        // 添加当前商品ID
+        this.checkData.push(id);
+      }
+      console.log(this.checkData)
+      // 判断单选和全选的关系,如果ID的数字组的length<商品数组的length，则说明还有某个商品的checked为false
+      // [2,3] == [{},{}]
+      if (this.checkData.length < this.goodsList.length) {
+        // 全部不能为true
+        this.allChecked = false;
+      } else {
+        // allChecked 为true
+        this.allChecked = true;
+      }
+    },
+    //数组删除
+    remove(arr, val) {
+      var index = arr.indexOf(val);
+      if (index > -1) {
+        arr.splice(index, 1);
+      }
+    },
   },
-  created(){
-    Vue.delete(this.obj,'num')
-    this.$delete(this.obj,'age')
-    console.log(this)
-    // this.$set(this.obj,'age',1000);
-    // this.obj.age =1000;
-  },
-  mounted(){
-    console.log(this.goodsList,'===')
-  }
 };
 </script>
+
 <style lang="less">
 .cart {
   width: 100%;
   height: 100%;
-  .btn {
-    margin-left: 80px;
+  margin-bottom: 0.6rem;
+  .van-checkbox {
+    font-size: 16px;
+  }
+  .cart-content {
+    display: flex;
+    justify-content: flex-start;
+    flex-flow: row nowrap;
+    align-items: center;
+    background-color: #fafafa;
+    margin-bottom: 0.1rem;
+    .van-card {
+      // flex:1;
+      padding: 0.1rem;
+      padding-left: 0.04rem;
+      width: 94%;
+      .van-button--mini {
+        width: 0.23rem;
+        height: 0.23rem;
+      }
+      .van-card__bottom {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        height: 0.26rem;
+      }
+    }
+  }
+
+  .custom-image .van-empty__image {
+    width: 2rem;
+    height: 2rem;
+  }
+  .van-empty__description {
+    text-align: center;
+    padding-top: 0.4rem;
+    font-size: 0.2rem;
   }
   .van-submit-bar {
     position: absolute;
     left: 0;
     bottom: 0;
-  }
-  .Shop_car {
-    background: #ccc;
-    margin-bottom: 120px;
-  }
-  .shop_car_main {
-    background-color: white;
-    padding: 0.05px 0px;
-  }
-
-  .no-goods-car {
-    width: 100%;
-    height: 1.5rem;
-    background: #fff;
-    text-align: center;
-    line-height: 1.5rem;
   }
   .shop_car_top {
     width: 100%;
@@ -125,28 +184,9 @@ export default {
     font-size: 15px;
     font-family: PingFangSC-regular;
   }
-  .car_img1 {
-    width: .2rem;
-    height: .19rem;
-    padding-top: .06rem;
-  }
   .car_img2 {
     width: 0.9rem;
     height: 100%;
-  }
-  .shop_car_main_main_right {
-    height: 100%;
-  }
-  .shop_car_main_main {
-    display: flex;
-    height: 1rem;
-    justify-content: space-around;
-    margin-bottom: 0.1rem;
-    align-items: center;
-    background: #fafafa;
-  }
-  .shop_car_main_main:nth-last-child(1) {
-    margin-bottom: 0.6rem;
   }
   .shop_car_main_top {
     padding-bottom: 0.06rem;
@@ -156,63 +196,12 @@ export default {
     justify-content: space-between;
     align-items: center;
   }
-  .carts {
-    width: 100%;
-  }
-  .zongliang {
-    display: flex;
-    justify-content: space-between;
-    color: rgba(153, 153, 153, 1);
-    font-size: 12px;
-    text-align: left;
-    font-family: PingFangSC-regular;
-  }
-  .shop_car_main_foot {
-    text-align: center;
-    display: flex;
-    justify-content: space-between;
-  }
-  .shop_car_main_main_right_text {
-    width: 1.8rem;
-    font-size: 13px;
-  }
-  .span_press {
-    color: rgba(242, 48, 48, 1);
-    font-size: 16px;
-    text-align: left;
-    font-family: PingFangSC-regular;
-  }
-  .press_div {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-  .press_div button {
-    width: .26rem;
-    border: none;
-    background-color: white;
-    font-size: .2rem;
-    height: .26rem;
-    color: #fff;
-    border: none;
-    border-radius: 2px;
-    background: #ee0a24;
-    padding: 0;
-  }
-  .jisuan {
-    line-height: 17px;
-    color: rgba(51, 51, 51, 1);
-    font-size: 18px;
-    text-align: center;
-    font-family: SFUIText-regular;
-    display: inline-block;
-  }
   .submit_money {
     width: 100%;
     height: 0.49rem;
     position: fixed;
     bottom: 0.66rem;
-    border-top: 1px solid #ccc;
+    border-top: 2px solid #ccc;
     box-sizing: content-box;
     left: 0;
     background: #fff;
@@ -222,13 +211,6 @@ export default {
     span:nth-of-type(2) {
       margin-right: 0.2rem;
     }
-    .van-submit-bar__bar{
-      border-top: 1px solid #ccc;
-    }
-  }
-  .jisuan_span {
-    width: 0.5rem;
-    display: inline-block;
   }
 }
 </style>

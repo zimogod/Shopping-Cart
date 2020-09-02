@@ -12,11 +12,12 @@ import {
   Cell, 
   Card,
   Checkbox,
-  SubmitBar
+  SubmitBar,
+  Empty
 } from 'vant';
 
 Vue.config.productionTip = false
-
+Vue.use(Empty);
 Vue.use(Cell);
 Vue.use(SubmitBar);
 Vue.use(Checkbox);
