@@ -1,11 +1,15 @@
 <template>
   <div class="list">
+    <home></home>
+    <home1></home1>
     <home2></home2>
+     <home3></home3>
+     ---
     <comA :arr="arr" a="10" b="20" c="30"></comA>
     <comB>
-      <!-- <div>{{ num }}</div>
+      <div>{{ num }}</div>
       <span>{{ num }}</span>
-      <p>{{ num }}</p> -->
+      <p>{{ num }}</p>
     </comB>
     <van-card 
       v-for="item in list"
