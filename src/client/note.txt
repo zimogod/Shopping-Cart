@@ -84,3 +84,50 @@ Object.defineProperty(obj,'age',{
     属性描述符:描述age的值是否可修改、可配置、可删除、可新增
     存取描述符:通过set、get方法设置【存储】属性，获取【访问属性】
 });
+
+vue中组件分为两类：
+    类组件：每个组件都有完整的功能，如：生命周期、data函数、实例【this】，有自己组件的数据
+    函数式组件：
+        概念：就是一个普通函数，大大降低了组件渲染消耗过程，只要负责写UI和CSS，
+             数据都是从父组件传递过来，目前vue的版本直接可以解析props,不用声明
+             props属性
+    如何让一个组件变成函数式组件？
+    
+        设置一个functional属性即可
+
+        场景：展示型页面  
+        1、无状态：自己组件内部不管理数据，也不操作数据
+        2、没有实例，没有this，没有生命周期，没有数据
+        3、只会解析一个props属性，目前自动解析 
+
+this.$slots.default:
+    以一个数组的方式接收插槽内传递过来的所有对象
+
+    场景：
+        1、性能优化
+        2、父传子 【间接】
+        3、多用于封装UI组件 【常用】
+
+    父组件：
+        <template>
+            <div>
+                <Child>
+                    <div>{{ userInfo }}</div>
+                    <div>内容</div>
+                    <div>尾</div>
+                </Child>
+            </div>
+        </template>
+
+
+    子组件：Child   [{ userInfo }]
+        <template>
+            <div v-if="this.$slots.default">
+                <slot>hdhfgh</slot>
+            </div>
+        </template>
+
+        
+
+
+

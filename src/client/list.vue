@@ -1,6 +1,11 @@
 <template>
   <div class="list">
-    <comA ref="zimo"></comA>
+    <comA :arr="arr" a="10" b="20" c="30"></comA>
+    <comB>
+      <!-- <div>{{ num }}</div>
+      <span>{{ num }}</span>
+      <p>{{ num }}</p> -->
+    </comB>
     <van-card 
       v-for="item in list"
       :key="item.id"
@@ -21,18 +26,23 @@
 import { listObj } from "../server";
 import { mapActions } from "vuex";
 import comA from './aaa';
+import comB from './bbb';
 // import bus from "../eventbus";
 export default {
   name: "list",
-  components:{comA},
+  components:{comA,comB},
   data() {
     return {
       // 响应式数据  vue能监听、跟踪到变化
       list: [],
-      arr:[3,5,6]
+      arr:[3,5,6],
+      num:'花花'
     };
   },
   methods: {
+    ggg(v){
+      console.log(v)
+    },
     ...mapActions(["GOODS_LIST", "GOTODETAILS"]),
     async getGoodsList() {
      await listObj.goodsList().then((res) => {
@@ -58,7 +68,7 @@ export default {
     })
   },
   mounted() {
-    console.log(this.$refs.zimo)
+    // console.log(this.$refs.zimo)
     this.getGoodsList();
     // 强制更新
     // this.$forceUpdate()

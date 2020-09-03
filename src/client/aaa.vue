@@ -1,22 +1,12 @@
-<template>
+<template functional>
   <div class="aaa">
-   活动
+   <div v-for="(item,index) in props.arr" :key="index">{{ item }}</div>
+   <div>{{ props.a }}</div>
+   <div>{{ props.b }}</div>
+   <div>{{ props.c }}</div>
   </div>
 </template>
-<script>
 
-export default {
-  name: "aaa",
-  data() {
-    return {
-        lists:[5,6,7]
-    };
-  },
-  methods: {
-    
-  },
-};
-</script>
 <style lang="less">
 .aaa{
     width: 100%;
