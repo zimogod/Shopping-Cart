@@ -1,6 +1,7 @@
 <template>
   <div class="list">
-    <van-card
+    <comA ref="zimo"></comA>
+    <van-card 
       v-for="item in list"
       :key="item.id"
       :price="item.price"
@@ -19,13 +20,16 @@
 <script>
 import { listObj } from "../server";
 import { mapActions } from "vuex";
+import comA from './aaa';
 // import bus from "../eventbus";
 export default {
   name: "list",
+  components:{comA},
   data() {
     return {
       // 响应式数据  vue能监听、跟踪到变化
       list: [],
+      arr:[3,5,6]
     };
   },
   methods: {
@@ -47,11 +51,18 @@ export default {
       });
     },
   },
-  // destroyed() {
-  //   bus.$emit("send", this.list);
-  // },
+  created(){
+    this.$nextTick(() =>{
+      // 可以直接操作DOM元素
+      // console.log(this.$refs.zimo.innerHTML,'666')
+    })
+  },
   mounted() {
+    console.log(this.$refs.zimo)
     this.getGoodsList();
+    // 强制更新
+    // this.$forceUpdate()
+    console.log(document.getElementsByClassName('list')[0],'111')
   },
 };
 </script>

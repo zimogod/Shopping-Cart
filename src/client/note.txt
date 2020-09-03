@@ -21,59 +21,66 @@ vue有哪些优点？
         2、一个一个的选择商品，知道商品全部选择后，则全选也选
         3、单选时，计算出单选的价格，全选时，计算全部购物车中商品的总价
 
+任何数据都可以使用vuex进行管理 【公共】
 
+vuex:
+    state:存储数据，数据仓库
+    mutations:修改state的唯一方法
+    actions:提交mutations，异步的【用户可操作的、定时器，回调函数】
+    getters:计算属性，有缓存值【基于组件中computed计算属性封装的】
+如果分模块：
+    modules:包含以上四个属性
+    namespaced:true  :设置命名空间
 
-        <script>
-// 通过一道题面试入职？
-// Symbol()  -->  vuex / redux  ->>  vuex  --> redux  对比    mixins   install
-//  Symbol() --》 instanceof -> [Symbol.hasIntance]
+如果分了模块：
+    state、getters确实分开了
+    mutations和actions暴露在vuex全局对象
 
+    如果方法重名了，设置命名空间
 
-// ajax  Promise   async/await【终极异步解决方式】  
+shim、polyfill:作用都是 优雅降级 
+优雅降级：思想，柔和的方法，进行降级，让以前的逗留期和现在的浏览器都可以使用
 
-// 宏管理  【消除魔术字符串】
-// const types = 'add';
-// const reduce = 'reduce';
-// function reducer(action){
-//   switch(action.type){
-//     case types:
-//       return 10;
-//       break;
-//     case reduce:
-//       return 20;
-//       break;
-//   }
-// }
-// reducer({
-//   type:types
-// })
+vue数据双向绑定的原理：
+    原理：
+        数据劫持，通过ES5中的Object.defineProperty()监听数据并且劫持数据，
+        然后具体通过get、set对应的getter、setter方法进行监听修改数据，当属性
+        被访问、修改时，通过watcher桥梁【信息转换站】通知组件进行变化，组件调用
+        render进行更新页面
+    注意：vue不兼容IE8及以下的浏览器 【ES3】根本就没有Object.defineProperty()方法
+         Object.defineProperty()在IE8及以下的浏览器不能shim,不能做优雅降级
 
-// reducer({
-//   type:reduce
-// })
-</script>
+this.$nextTick():
+    作用：
+        等待真实DOM挂载到页面上才执行的方法，异步的方法
+        不管哪个生命周期阶段，this.$nextTick()只会在组件挂载中，一定是你调用完成render
+        函数了，this.$nextTick()里面可以操作真实的DOM元素
 
-函数生成器
-function *gen(){
-    yeild 10;
-    yeild 20;
-    yeild 30;
-}
-let a = gen();
-a.next()  // {done:false,value:值}
-a.next()
-a.next() 
-a.next()//{done:true,value:undefined}
+    this.$nextTick(() =>{}) 组件内
+    Vue.nextTick(() =>{}) 全局
 
-function api(){
-    return {
-        next:() =>{
-            value:
-            return {
-                done:
-                value:
-            }
-        }
-    }
-}
+ref:引用元素或者组件【转发】，可以通过ref获取当前元素及所有子元素的所有内容
+    可以用在元素上或者组件标签上
+    命名： ref = 'xxx'
+    获取：this.$refs.xxx
 
+    缺点：
+        操作真实DOM，非常耗费性能
+
+面试题：要想操作真实DOM元素
+    回答：
+        1、在mounted挂载中生命周期
+        2、nextTick()函数中操作
+
+面试题：如果数据变化了，页面不更新怎么办？
+     回答： 
+        1、看数据是否是响应式的  如果不是通过 Vue.set()  this.$set()变成响应式数据
+        2、强制更新视图  $forceUpdate():强制调用render函数  【缺点：耗性能】
+
+vue组件有缓存怎么办？
+    this.$destroy():销毁缓存，让当前组件进入初始化状态  【不常用】
+
+Object.defineProperty(obj,'age',{
+    属性描述符:描述age的值是否可修改、可配置、可删除、可新增
+    存取描述符:通过set、get方法设置【存储】属性，获取【访问属性】
+});

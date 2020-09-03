@@ -112,7 +112,7 @@ export default {
         arr.splice(index, 1);
       }
     },
-  },
+  }
 };
 </script>
 
