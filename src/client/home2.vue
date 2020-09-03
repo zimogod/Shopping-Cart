@@ -1,26 +1,24 @@
 <template>
-  <div class="bbb" v-if="$slots.default">
-      <div>
-          <slot></slot>
-      </div>
+  <div class="home2">
+    home2组件
   </div>
 </template>
 <script>
 
 export default {
-  name: "bbb",
+  name: "home2",
   data() {
     return {
       
     };
   },
-  mounted(){
-    //   console.log(this.$slots.default,'===')
-  }
+  methods: {
+    
+  },
 };
 </script>
 <style lang="less">
-.bbb{
+.home2{
     width: 100%;
     height: 100%;
 }

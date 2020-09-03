@@ -1,5 +1,6 @@
 <template>
   <div class="list">
+    <home2></home2>
     <comA :arr="arr" a="10" b="20" c="30"></comA>
     <comB>
       <!-- <div>{{ num }}</div>
