@@ -1,5 +1,6 @@
 <template>
   <div class="cart">
+    <function-nal :goods="goods" a='10' b="20" c = "30"></function-nal>
     <div v-if="goodsList.length > 0">
       <div class="shop_car_main_top">
         <!-- 全选 -->
@@ -63,10 +64,13 @@
 <script>
 import Vue from "vue";
 import { mapState, mapActions, mapGetters } from "vuex";
+import functionNal from './functional'
 export default {
   name: "cart",
+  components:{functionNal},
   data() {
     return {
+      goods:[4,5,6,7,8,9],
       allChecked: false,
       checkData: [], // 存ID  为了 和 goodsList做对比
     };

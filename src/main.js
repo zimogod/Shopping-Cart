@@ -4,9 +4,10 @@ import router from './router'
 import store from './store'
 import zimo from './pages/index';
 import User from './pages/use';
-
+// 自定义封装的Vue.use() 方法
 User(Vue);
 Vue.user(zimo);
+
 import { 
   Button,
   NavBar,
@@ -33,9 +34,6 @@ Vue.use(NavBar);
 Vue.use(Tabbar);
 Vue.use(TabbarItem);
 Vue.use(PullRefresh);
-
-// initUse(Vue);
-// Vue.user(pages)
 
 new Vue({
   router,

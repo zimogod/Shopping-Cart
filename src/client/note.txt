@@ -128,9 +128,53 @@ this.$slots.default:
         </template>
 
 
+脏数据：开发项目的时候，从服务端请求数据代码全都没有错，100  --> 200  脏数据【数据库中的数据有缓存】
+
+复习： 
+    angular：脏检查   每过一段时间检查一下数据是否有变化，有变化了则调用一系列更新方法，
+            没有变化直接返回
+            时间轮询：定时器
+
+    发布订阅者设计模式:百度  作业
+    vue数据双向绑定原理:
+        数据劫持+发布订阅者设计模式，实现数据双向绑定，具体通过Object.defineProperty()
+        方法封装的，此Object.defineProperty()方法可以通过set/get 把vue组件中的data数据拦截修改并转换成getter/setter【响应式数据】，getter/setter进行监听我们数据，如果监听到数据变化了，则通知watcher【是一个信息传递者】，通过UI，数据就变化了
+
+   this.num = 100;
+
+   this._data.num = 100;
 
 
 
+    data(){
+        return {
+            msg:'',
+            num:100,
+            info:''
+        }
+    }
+    { num,info,msg }
+
+    let _data = data()
+    let _data = { num,info,msg };
+Object.defineProperty(_data)
 
 
+vue中组件分为两种：
+    类组件：常用的，生命周期、data、实例【this】、计算属性、props
+    函数式组件：
+        如何一个组件变为函数式组件，设置functional:true,默认值为true
+        概念： 
+            就是一个普通函数，主要在函数式组件内写UI和css，目前的函数式组件可以默认解析
+            props属性，数据只能从父级传递过来，自己组件没有数据，更不能操作数据，没有
+            this，生命周期
+        场景：官网、展示型的页面
 
+        1、无状态  --> 无数据
+        2、没有实例 【没有this】
+        3、只能解析props属性 
+    优点：
+        消耗非常少，只是执行了一个普通函数，渲染过程减少
+ 
+ $attrs:
+    以对象的方式接收父组件传递过来的所有数据

@@ -19,13 +19,14 @@ const initUse = Vue => {
         return this;
     }
     function toArray (list, start) {
-        start = start || 0
-        let i = list.length - start
+        start = start || 0;
+        let i = list.length - start;
       //将存放参数的数组转为数组，并除去第一个参数（该组件）
         const ret = new Array(i)
       //循环拿出数组
         while (i--) {
           ret[i] = list[i + start]
+          console.log(ret[i])
         }
         return ret
       }

@@ -1,16 +1,16 @@
 <template>
   <div class="list">
-    <home></home>
+    <!-- <home></home>
     <home1></home1>
     <home2></home2>
      <home3></home3>
-     ---
-    <comA :arr="arr" a="10" b="20" c="30"></comA>
+     --- -->
+    <!-- <comA :arr="arr" a="10" b="20" c="30"></comA>
     <comB>
       <div>{{ num }}</div>
       <span>{{ num }}</span>
       <p>{{ num }}</p>
-    </comB>
+    </comB> -->
     <van-card 
       v-for="item in list"
       :key="item.id"
@@ -73,6 +73,7 @@ export default {
     })
   },
   mounted() {
+    console.log(this)
     // console.log(this.$refs.zimo)
     this.getGoodsList();
     // 强制更新
