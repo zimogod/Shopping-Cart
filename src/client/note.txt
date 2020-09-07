@@ -138,7 +138,9 @@ this.$slots.default:
     发布订阅者设计模式:百度  作业
     vue数据双向绑定原理:
         数据劫持+发布订阅者设计模式，实现数据双向绑定，具体通过Object.defineProperty()
-        方法封装的，此Object.defineProperty()方法可以通过set/get 把vue组件中的data数据拦截修改并转换成getter/setter【响应式数据】，getter/setter进行监听我们数据，如果监听到数据变化了，则通知watcher【是一个信息传递者】，通过UI，数据就变化了
+        方法封装的，此Object.defineProperty()方法可以通过set/get 把vue组件中的data
+        数据拦截修改并转换成getter/setter【响应式数据】，getter/setter进行监听我们数据，
+        如果监听到数据变化了，则通知watcher【是一个信息传递者】，通过UI，数据就变化了
 
    this.num = 100;
 
@@ -177,4 +179,134 @@ vue中组件分为两种：
         消耗非常少，只是执行了一个普通函数，渲染过程减少
  
  $attrs:
-    以对象的方式接收父组件传递过来的所有数据
+    以对象的方式接收父组件传递过来的所有数据,如果在组件中某个
+    属性使用props进行接收了，则$attrs会自动剔除当前属性
+
+this.$destroy():
+    清空当前组件内的数据缓存，组件还在，把当前组件重置【初始化】
+this.$emit('send','数据'):
+    只负责发送数据
+this.$on('send',() =>{}):
+    只负责接收数据
+this.$off('send'):
+    解绑监听函数
+
+Vue.component():
+components:{'组件名',{}}
+
+watch:监听url路由、data数据、props
+    deep:true :深度监听
+    immediate : 立即开启监听
+
+    data(){
+        return {
+            num1:100
+        } 
+    }
+    watch:{
+        num1(newValue,oldValue){
+
+        },
+        deep:true,
+        immediate:true
+    }
+computed:计算属性，有缓存值
+
+methods、watch、computed 区别？
+
+解耦：
+
+    data(){
+        return {
+            msg:'daxian'
+        }
+    }
+    data() ===>  {}
+
+    Vue.prototype._data = {}  == data()
+    Vue.prototype._data = {msg:''}
+
+filters: 局部过滤器
+    有一个固定参数，此参数就是你要格式化的数据
+Vue.filter():全局过滤器
+    有一个固定参数，此参数就是你要格式化的数据，全局的，
+    在当前vue项目中任何地方都可以使用
+
+directives:局部注册自定义指令
+    局部注册自定义指令，第一个参数为指令名，第二个参数为回调函数
+    回调函数里面有三个参数，分别：
+    el:当前绑定指令的元素
+    binding:相当于你动态传入的参数
+    vnode:当前元素的虚拟DOM  【不常用】
+Vue.directive():全局注册自定义指令
+    全局注册自定义指令，第一个参数为指令名，第二个参数为回调函数
+    回调函数里面有三个参数，分别：
+    el:当前绑定指令的元素
+    binding:相当于你动态传入的参数
+    vnode:当前元素的虚拟DOM  【不常用】
+
+    自定义指令场景：
+        封装日历组件的时候才使用 【事件委托】
+
+ref:引用 【转发】，获取一个元素或者组件的实例【全部内容】 
+    缺点：操作真实DOM，能不用就不用
+    
+Vue中diff算法：
+    打补丁：精细 
+    diff算法原理：算法复杂度 O[n]
+       1、都是通过三层对比进行虚拟DOM的计算、替换等等，注意的是不能跨层对比
+         页面对比【html】、组件对比【component】、元素对比【element】
+
+       2、key：key一致，diff算法认为没有变化，无需更新，无需重新计算
+
+真实DOM解构
+<div>
+  <span>fgg1</span>
+  <span>fgg2</span>
+</div>
+// 转换成虚拟节点 类似于下面这种
+const Vnode = {
+  tag:'div',
+  key:'34',
+  children:[
+      {
+        tag:'span',
+        key:'788',
+        children:'fgg'
+    },
+    {
+        tag:'span',
+        key:'789',
+        children:'fgg'
+    }
+  ]
+}
+1、如果oldNode和newNode一样，则直接return，无需再进行下去
+2、diff算法检查key的变化  diff算法 【打补丁】
+3、patch更新虚拟DOM      虚拟DOM
+4、更新完之后patch通知render函数
+
+    function patch(oldNode,VNode){
+        初始化时候，第一次加载组件
+        if(!oldNode){
+            oldNode = newNode
+        }else if(oldNode === newNode){
+            return ;
+        }else{
+            render:(createElement) => {
+                return createElement(div,{id:'app'},[
+                    {
+                        tag:'div',
+                        key:'34',
+                        children:'见风使舵开会发给'
+                    },
+                ])
+            }
+        }
+        render: h => h(App)
+        
+    }
+    patch()
+
+
+

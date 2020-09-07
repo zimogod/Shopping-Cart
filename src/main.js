@@ -7,6 +7,21 @@ import User from './pages/use';
 // 自定义封装的Vue.use() 方法
 User(Vue);
 Vue.user(zimo);
+// 全局过滤器
+Vue.filter('formate',(v,str) => {
+  let years = v.getFullYear();
+      let month = v.getMonth() +1;
+      let day = v.getDate();
+      // if(day){ day = '';}
+      return `${years}${str}${month}${str}${day}`;
+});
+
+Vue.directive('zimo-ui',(el,binding) =>{
+  console.log(el)
+  el.style.width = binding.value + 'px';
+  el.style.height = binding.value + 'px';
+  el.innerHTML = '我是全局指令';
+});
 
 import { 
   Button,

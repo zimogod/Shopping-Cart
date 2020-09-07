@@ -1,5 +1,7 @@
 <template>
   <div class="cart">
+    <div ref="zimogod">紫漠哥哥</div>
+    <comZ ref="zimoUI" a="10" b="20" c="30"></comZ>
     <function-nal :goods="goods" a='10' b="20" c = "30"></function-nal>
     <div v-if="goodsList.length > 0">
       <div class="shop_car_main_top">
@@ -53,6 +55,7 @@
       </div>
     </div>
     <div v-else class="no-goods-car">
+      <div>{{ new Date() | formate('-') }}</div>
       <van-empty
         class="custom-image"
         image="https://img.yzcdn.cn/vant/custom-empty-image.png"
@@ -65,9 +68,13 @@
 import Vue from "vue";
 import { mapState, mapActions, mapGetters } from "vuex";
 import functionNal from './functional'
+import comZ from './zzz';
 export default {
   name: "cart",
-  components:{functionNal},
+  components:{functionNal,comZ},
+  provide:{
+    good:345
+  },
   data() {
     return {
       goods:[4,5,6,7,8,9],
@@ -116,6 +123,10 @@ export default {
         arr.splice(index, 1);
       }
     },
+  },
+  mounted(){
+    console.log(this.$refs.zimogod.innerHTML)
+    console.log(this.$refs.zimoUI)
   }
 };
 </script>
